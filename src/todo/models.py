@@ -1,11 +1,16 @@
-from sqlmodel import SQLModel, Field
+from typing import Optional
+from sqlalchemy import String, Boolean
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from src.database import Base
 
 
-# Define the Todo model, which represents a task in the to-do list
-class Todo(SQLModel, table=True):
-    __tablename__ = "todos"  # Specify the name of the database table
+class Todo(Base):
+    __tablename__ = "todos"
 
-    id: int | None = Field(default=None, primary_key=True)
-    title: str = Field(max_length=100)
-    description: str | None = Field(default=None)
-    completed: bool = Field(default=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(String(100))
+    description: Mapped[Optional[str]]
+    completed: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    class Config:
+        from_attributes = True
